@@ -79,3 +79,15 @@ a{
     background-color: #45a049;
   }
   
+  .home-btn {
+    margin-left: auto;
+    text-decoration: none;
+    padding: 5px 10px;
+    background-color: #4caf50;
+    color: white;
+    border-radius: 4px;
+}
+
+.home-btn:hover {
+    background-color: #45a049;
+}
