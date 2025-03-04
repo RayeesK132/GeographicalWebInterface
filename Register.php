@@ -1,14 +1,9 @@
 <?php
-// register.php
-session_start();
-
-// Database connection settings
 $host = 'localhost';
 $dbname = 'login_register';
 $username = 'root';
-$password = ''; // Your database password
+$password = '';
 
-// Create PDO instance for database connection
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -19,23 +14,43 @@ try {
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get the input values
-    $user_name = $_POST['username'];
-    $user_email = $_POST['email'];
-    $user_password = $_POST['password'];
+    // Get and validate input values
+    $user_name = trim($_POST['username']);
+    $user_email = trim($_POST['email']);
+    $user_password = trim($_POST['password']);
 
-    // Hash the password before saving to the database
-    $hashed_password = password_hash($user_password, PASSWORD_DEFAULT);
+    // Validation
+    if (empty($user_name)) {
+        $message = 'Username is required';
+    } elseif (empty($user_email)) {
+        $message = 'Email is required';
+    } elseif (empty($user_password)) {
+        $message = 'Password is required';
+    } elseif (strlen($user_name) < 3) {
+        $message = 'Username must be at least 3 characters';
+    } elseif (!filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
+        $message = 'Invalid email format';
+    } elseif (strlen($user_password) < 6) {
+        $message = 'Password must be at least 6 characters';
+    } else {
+        $hashed_password = password_hash($user_password, PASSWORD_DEFAULT);
 
-    // Insert the user into the database
-    try {
-        $query = "INSERT INTO users (username, email, password) VALUES (:username, :email, :password)";
+        $query = "SELECT * FROM users WHERE username = :username OR email = :email";
         $stmt = $pdo->prepare($query);
-        $stmt->execute([':username' => $user_name, ':email' => $user_email, ':password' => $hashed_password]);
+        $stmt->execute([':username' => $user_name, ':email' => $user_email]);
 
-        $message = 'Registration successful! You can now log in.';
-    } catch (PDOException $e) {
-        $message = 'Error: ' . $e->getMessage();
+        if ($stmt->rowCount() > 0) {
+            $message = 'Username or email already exists.';
+        } else {
+            $insert_query = "INSERT INTO users (username, email, password) VALUES (:username, :email, :password)";
+            $stmt = $pdo->prepare($insert_query);
+
+            if ($stmt->execute([':username' => $user_name, ':email' => $user_email, ':password' => $hashed_password])) {
+                $message = 'Registration successful!';
+            } else {
+                $message = 'An error occurred. Please try again.';
+            }
+        }
     }
 }
 ?>
@@ -44,8 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <link rel="stylesheet" href="indexstyle.css" />
     <style>
@@ -146,9 +161,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <button type="submit">Register</button>
         </form>
+
         <div class="footer-links">
             <a href="Login.php">Have an account? Login</a>
-            <a href="index.php" class="home-btn">Home</a>
+            <a href="index.html" class="home-btn">Home</a>
         </div>
     </div>
 </body>

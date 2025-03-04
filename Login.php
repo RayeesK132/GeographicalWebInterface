@@ -6,9 +6,8 @@ session_start();
 $host = 'localhost';
 $dbname = 'login_register';
 $username = 'root';
-$password = ''; // Your database password
+$password = '';
 
-// Create PDO instance for database connection
 try {
   $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -19,29 +18,36 @@ try {
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  // Get the input values
-  $user_name = $_POST['username'];
-  $user_password = $_POST['password'];
+  // Get and validate input values
+  $user_name = trim($_POST['username']);
+  $user_password = trim($_POST['password']);
 
-  // Fetch user from database
-  try {
-    $query = "SELECT * FROM users WHERE username = :username";
-    $stmt = $pdo->prepare($query);
-    $stmt->execute([':username' => $user_name]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+  // Validation
+  if (empty($user_name)) {
+    $_SESSION['login_error'] = 'Username is required';
+  } elseif (empty($user_password)) {
+    $_SESSION['login_error'] = 'Password is required';
+  } elseif (strlen($user_name) < 3) {
+    $_SESSION['login_error'] = 'Username must be at least 3 characters';
+  } else {
+    // Fetch user from database
+    try {
+      $query = "SELECT * FROM users WHERE username = :username";
+      $stmt = $pdo->prepare($query);
+      $stmt->execute([':username' => $user_name]);
+      $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user && password_verify($user_password, $user['password'])) {
-      // Password matches
-      $_SESSION['username'] = $user['username'];
-      $_SESSION['logged_in'] = true;
-      header('Location: Welcome.php'); // Redirect to your dashboard or homepage
-      exit;
-    } else {
-      // Invalid username or password
-      $_SESSION['login_error'] = 'Invalid username or password';
+      if ($user && password_verify($user_password, $user['password'])) {
+        $_SESSION['username'] = $user['username'];
+        $_SESSION['logged_in'] = true;
+        header('Location: Welcome.php');
+        exit;
+      } else {
+        $_SESSION['login_error'] = 'Invalid username or password';
+      }
+    } catch (PDOException $e) {
+      $_SESSION['login_error'] = 'Error: ' . $e->getMessage();
     }
-  } catch (PDOException $e) {
-    $_SESSION['login_error'] = 'Error: ' . $e->getMessage();
   }
 }
 ?>
@@ -170,11 +176,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     h4 {
       text-align: center;
-      /* this centers the text horizontally */
       font-size: 20px;
-      /* to adjust font size as needed */
       margin: 20px 0;
-      /* This is used to adds space around the "OR" text */
     }
   </style>
 </head>
@@ -183,20 +186,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <div class="login-container">
     <h2>Login</h2>
     <form method="POST">
-      <input
-        type="text"
-        name="username"
-        placeholder="Enter username"
-        required />
-      <input
-        type="password"
-        name="password"
-        placeholder="Enter password"
-        required />
+      <input type="text" name="username" placeholder="Enter username" required />
+      <input type="password" name="password" placeholder="Enter password" required />
       <button type="submit">Login</button>
     </form>
 
-    <!-- Display error message if login fails -->
     <?php if (isset($_SESSION['login_error'])): ?>
       <div class="error-message">
         <?php echo $_SESSION['login_error']; ?>
@@ -210,7 +204,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <h4>OR</h4>
-    <!-- Social Login Buttons -->
     <div class="social-login">
       <a href="google-login.php" class="social-btn google-btn">
         <img src="Google-Logo.webp" alt="Google" style="width: 50px" />
