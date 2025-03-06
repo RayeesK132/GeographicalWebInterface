@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #f4f4f4, #d9e3f0);
+            color: #333;
+        }
+        header {
+            background: linear-gradient(to right, #007bff, #0056b3);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        nav {
+            background: linear-gradient(to right, #007bff, #0056b3);
+            padding: 0.5rem;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            background: linear-gradient(to right, #4a90e2, #357ab8);
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+        section {
+            background: white;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+        }
+        h2 {
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+            background: linear-gradient(to right, #007bff, #0056b3);
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: linear-gradient(to right, #007bff, #0056b3);
+            color: white;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        ul li {
+            background: linear-gradient(to right, #f9f9f9, #e6e6e6);
+            margin: 5px 0;
+            padding: 10px;
+            border-left: 5px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Admin Dashboard</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#user-permissions">User Permissions</a></li>
+            <li><a href="#database-logs">Database Logs</a></li>
+            <li><a href="#login-logs">Login/Logout Logs</a></li>
+            <li><a href="#map-assets">Map Asset Logs</a></li>
+        </ul>
+    </nav>
+    
+    <section id="user-permissions">
+        <h2>User Permissions</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Permissions</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dynamic user data rows here -->
+            </tbody>
+        </table>
+    </section>
+
+    <section id="database-logs">
+        <h2>Database Logs</h2>
+        <ul id="db-log-list">
+            <!-- Database logs will be dynamically inserted here -->
+        </ul>
+    </section>
+
+    <section id="login-logs">
+        <h2>Login/Logout Logs</h2>
+        <ul id="login-log-list">
+            <!-- Login/logout logs dynamically inserted here -->
+        </ul>
+    </section>
+
+    <section id="map-assets">
+        <h2>Map Asset Logs</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Asset ID</th>
+                    <th>Asset Name</th>
+                    <th>Added By</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dynamic asset log rows here -->
+            </tbody>
+        </table>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
