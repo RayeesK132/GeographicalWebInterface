@@ -2,6 +2,18 @@
 // login.php
 session_start();
 
+
+$timeout_duration = 1800; // Auto logout after 30 minutes
+
+if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY']) > $timeout_duration) {
+  session_unset();
+  session_destroy();
+  header("Location: login.php?message=SessionExpired");
+  exit();
+}
+
+$_SESSION['LAST_ACTIVITY'] = time();
+
 // Database connection settings
 $host = 'localhost';
 $dbname = 'login_register';
@@ -60,6 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login Page</title>
   <link rel="stylesheet" href="indexstyle.css" />
+  <!-- Add Google Sign-In Script -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -139,7 +153,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     .social-btn {
       display: inline-block;
-      width: 93%;
+      width: 299px;
+      height: 44px;
       margin: 10px 0;
       padding: 10px;
       text-align: center;
@@ -147,6 +162,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       cursor: pointer;
       font-size: 14px;
       font-weight: bold;
+      line-height: 24px;
+      box-sizing: border-box;
     }
 
     .google-btn {
@@ -165,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     .social-btn img {
-      width: 10px;
+      width: 24px;
       margin-right: 10px;
       vertical-align: middle;
     }
@@ -205,19 +222,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <h4>OR</h4>
     <div class="social-login">
-      <a href="google-login.php" class="social-btn google-btn">
-        <img src="Google-Logo.webp" alt="Google" style="width: 50px" />
-      </a>
+      <!-- Google Sign-In Button -->
+      <div id="g_id_onload"
+        data-client_id="30924418284-p221mood7t49ht1j0dpeh1d9ha23sej1.apps.googleusercontent.com"
+        data-context="signin"
+        data-ux_mode="popup"
+        data-callback="handleCredentialResponse"
+        data-auto_prompt="false">
+      </div>
+      <div class="g_id_signin"
+        data-type="standard"
+        data-size="large"
+        data-width="299">
+      </div>
 
       <a href="facebook-login.php" class="social-btn facebook-btn">
-        <img src="FB-Logo.png" alt="Facebook" style="width: 35px" />
+        <img src="FB-Logo.png" alt="Facebook" />
       </a>
 
       <a href="linkedin-login.php" class="social-btn linkedin-btn">
-        <img src="linkedin-logo.webp" alt="LinkedIn" style="width: 50px" />
+        <img src="linkedin-logo.webp" alt="LinkedIn" />
       </a>
     </div>
   </div>
+
+  <!-- JavaScript for Google Sign-In -->
+  <script>
+    function handleCredentialResponse(response) {
+      console.log('Sending token to google-login.php');
+      fetch('google-login.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: 'credential=' + response.credential
+        })
+        .then(response => {
+          console.log('Raw response:', response); // Log the full response object
+          if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.status);
+          }
+          return response.text(); // Get raw text first to debug
+        })
+        .then(text => {
+          console.log('Response text:', text); // Log raw text
+          try {
+            const data = JSON.parse(text); // Parse JSON manually
+            console.log('Parsed data:', data);
+            if (data.success) {
+              console.log('Redirecting to Welcome.php');
+              window.location.href = 'Welcome.php';
+            } else {
+              alert('Google Login Failed: ' + (data.error || 'Unknown error'));
+            }
+          } catch (e) {
+            console.error('JSON parse error:', e);
+            alert('Error parsing response: ' + text);
+          }
+        })
+        .catch(error => {
+          console.error('Fetch error:', error);
+          alert('Fetch Error: ' + error.message);
+        });
+    }
+  </script>
 </body>
 
 </html>
