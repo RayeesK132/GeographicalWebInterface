@@ -67,8 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Function to send verification email
-function sendVerificationEmail($to, $verificationCode)
-{
+function sendVerificationEmail($to, $verificationCode) {
     $mail = new PHPMailer(true);
     try {
         $mail->isSMTP();
@@ -95,14 +94,12 @@ function sendVerificationEmail($to, $verificationCode)
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
     <div class="signup-container">
         <h2>Sign Up</h2>
@@ -127,5 +124,4 @@ function sendVerificationEmail($to, $verificationCode)
         <p>Already have an account? <a href="login.php">Login</a></p>
     </div>
 </body>
-
 </html>

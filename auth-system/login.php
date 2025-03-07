@@ -37,19 +37,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-
+    
     <!-- External CSS Libraries -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
     <!-- Internal CSS -->
     <style>
-        body,
-        html {
+        body, html {
             margin: 0;
             padding: 0;
             height: 100%;
@@ -74,8 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-bottom: 20px;
         }
 
-        .error,
-        .success {
+        .error, .success {
             background-color: #f44336;
             color: white;
             padding: 10px;
@@ -88,8 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background-color: #4CAF50;
         }
 
-        input[type="text"],
-        input[type="password"] {
+        input[type="text"], input[type="password"] {
             width: 100%;
             padding: 12px;
             margin: 10px 0;
@@ -136,7 +132,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 
 </head>
-
 <body>
 
     <div class="login-container">
@@ -183,5 +178,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </script>
 
 </body>
-
 </html>

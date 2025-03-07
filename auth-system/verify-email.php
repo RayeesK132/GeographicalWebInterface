@@ -23,3 +23,4 @@ if (isset($_GET['code'])) {
 } else {
     echo "No verification code provided.";
 }
+?>
