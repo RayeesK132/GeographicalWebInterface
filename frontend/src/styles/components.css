@@ -1,0 +1,88 @@
+.profile-form {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.admin-dashboard {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 300px;
+    height: 100vh;
+    background: white;
+    padding: 20px;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.map-controls {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+    background: white;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 4px;
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.notification.info {
+    background: #e3f2fd;
+    color: #0d47a1;
+}
+
+.notification.error {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.notification.success {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.spinner {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+}
+
+.error-container {
+    text-align: center;
+    padding: 40px;
+    background: #ffebee;
+    border-radius: 8px;
+    margin: 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
